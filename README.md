@@ -15,6 +15,9 @@ If you are MAC Silicon user, Please use the follwing repo.
 
 - A working Vagrant setup using Vagrant + VirtualBox
 
+## TODO
+Switch to ansible
+
 ## Documentation
 
 Current k8s version for CKA, CKAD, and CKS exam: 1.29. 

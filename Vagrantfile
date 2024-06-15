@@ -15,7 +15,8 @@ Vagrant.configure("2") do |config|
     config.vm.box = settings["software"]["box"]
   end
   config.vm.box_check_update = true
-  
+  config.vbguest.auto_update = false
+
   config.disksize.size = "500GB"
   
   config.vm.define "master" do |master|

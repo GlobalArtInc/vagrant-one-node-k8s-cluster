@@ -6,7 +6,7 @@ set -euxo pipefail
 
 NODENAME=$(hostname -s)
 
-sudo kubeadm config images pull
+sudo kubeadm config images pull 1>&2 2>/dev/null;
 
 echo "Preflight Check Passed: Downloaded All Required Images"
 
@@ -51,3 +51,19 @@ EOF
 
 kubectl apply -f https://raw.githubusercontent.com/techiescamp/kubeadm-scripts/main/manifests/metrics-server.yaml
 kubectl taint nodes master node-role.kubernetes.io/control-plane:NoSchedule-
+
+sudo apt update
+sudo apt install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker vagrant
+sudo usermod -aG docker $USER
